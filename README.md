@@ -1,2 +1,2 @@
-# hs-truth-or-dare
-A truth or dare randomizer for HS games.
+# HS-truth-or-dare
+A truth or dare randomizer created for HS games.

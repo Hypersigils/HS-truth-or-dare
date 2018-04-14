@@ -1,0 +1,79 @@
+<html>
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="JSON/defaults.js"></script>
+	<script src="JSON/preferences.js"></script>
+
+	<script src="JSON/diablo_3.js"></script>
+	<link rel="stylesheet" type="text/css" href="style.css"></style>
+</head>
+<body style="background-image: url('backgrounds/li-ming1.jpg'); background-repeat: no-repeat;">
+<!-- <body style="background-color: black;"> -->
+	<div id="content" class="white">
+		<div class="row" id="top">
+			<div class="column">
+				<div id="title" class="white" style="width: 700px;">
+					<h2 style="text-align: center;">
+						<span id="when" style="color: red;">When?</span> 
+						<span id="who" style="color: mediumseagreen;">Who?</span> 
+						<span id="what" style="color: dodgerblue;">Does what</span>, 
+						<span id="do" style="color: violet;">do what</span>.
+					</h2>
+				</div>
+			</div>
+			<div class="column">
+				<div class="white" style="display: flex; align-items: center; flex-grow: 1">
+					<button onclick="randomize()" style="height: 50px; font-size: 12pt; font-weight: bold;">Reroll</button>
+				</div>
+			</div>
+		</div>
+		<div class="row" id="bottom">
+			<div class="column" id="left">
+				<div id="game" class="white"><h3>Game:</h3> 
+					<select style="width: -webkit-fill-available;">
+						<option value=diablo_3>Diablo 3</option>
+					</select>
+				</div>
+				<div class="white" id="modes">
+					<h3>Modes</h3>
+					<ul>
+					</ul>
+				</div>
+			</div>
+			<div class="column" id="middle">
+				<div class="available white" id="parts">
+					<h3>Available parts</h3>
+				</div>
+				<div class="available white" id="toys">
+					<h3>Available toys</h3>
+				</div>
+			</div>
+			<div class="column" id="right">
+				<div id="triggers" class="white">
+					<h3>Triggers</h3>
+					<div class="white">
+						Game-specific
+						<div class="edit">
+							<ul id="game-specific">
+							</ul>
+						</div>
+					</div>
+					<div class="white" style="margin-bottom: 0px;">
+						Universal
+						<div class="edit">
+							<ul id="universal">
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="white">
+					<button>Save</button>
+					<button>Load</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+<script src="script.js"></script>
+</body>
+</html>
