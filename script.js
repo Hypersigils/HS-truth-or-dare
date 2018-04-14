@@ -159,12 +159,9 @@ var fill_triggers = function() {
 }
 
 var fill_availables = function() {
-	console.log("hi");
-
 	var sections = ["parts", "toys"];
 	sections.forEach(function(section) {
 		var div = $("#" + section);
-		console.log(div);
 		for(var category in availables["Available " + section]) {
 			div.append(category);
 			var ul = document.createElement("ul");
@@ -190,7 +187,7 @@ var split_line = function(line) {
 
 var fill_archetype = function(line) {
 
-	var archetypes = {"bodypart": get_available("parts"), "toys": get_available("toys")};
+	var archetypes = {"bodypart": get_boxes("parts", true), "toys": get_boxes("toys", true)};
 
 	while(line.includes("$")) {
 		var match = line.match(/\$(.*?)\$/);
@@ -289,7 +286,6 @@ var randomize = function() {
 		if(who === "you") trigger_name = pronounize(trigger_name);
 		$("#what").text(split_line(trigger_name));
 
-		
 		$("#do").text(split_line(fill_archetype(task.title)));
 
 		$("#title").find("h2").fadeTo(1000, 1);
@@ -333,5 +329,4 @@ $(document).ready(function() {
 
 	// Random task
 	randomize();
-
 });
