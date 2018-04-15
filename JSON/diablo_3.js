@@ -78,8 +78,10 @@ var diablo_3 = {
 			}
 		]
 	},
-	"Truths": [
-	],
-	"Dares": [
-	]
+	"Tasks": {	
+		"truths": [
+		],
+		"dares": [
+		]
+	}
 }

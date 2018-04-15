@@ -5,33 +5,6 @@ Array.prototype.random = function() {
 	return this[Math.floor(Math.random() * this.length)];
 }
 
-//JSON interaction
-var get_all_triggers = function(objects, search_string) {
-	var triggers = [];
-	var keywords = ["when","during"]
-
-	objects.forEach(function(object) {
-		keywords.forEach(function(keyword) {
-			if(!search_string || search_string === keyword) triggers = triggers.concat(object["Triggers"][keyword]);
-		});
-	});
-
-	return triggers;
-}
-
-var get_all_tasks = function(objects, search_string) {
-	var tasks = [];
-	var keywords = ["Truths","Dares"]
-
-	objects.forEach(function(object) {
-		keywords.forEach(function(keyword) {
-			if(!search_string || search_string === keyword) tasks = tasks.concat(object[keyword]);
-		});
-	});
-
-	return tasks;
-}
-
 //SETUP SCRIPTS
 
 var make_checkbox_list = function(json_object) {
@@ -59,53 +32,55 @@ var make_checkbox_list = function(json_object) {
 	});
 }
 
-var make_available_category = function(title, items) {
+var make_ul = function(items, include_erogenous) {
 	var ul = document.createElement("ul");
 	items.forEach(function(item) {
 		var li = document.createElement("li");
 		var label = document.createElement("label");
-		var span = document.createElement("span");
-		var input = document.createElement("input");
-		input.type = "checkbox";
-		label.textContent = item;
+		var erogenous_span = document.createElement("span");
+		var text_span = document.createElement("span");
+		var enabled_span = document.createElement("span");
+		var erogenous_input = document.createElement("input");
+		var enabled_input = document.createElement("input");
 
-		span.append(input);
-		label.append(span);
+		if(include_erogenous) {
+			erogenous_span.className = "erogenous";
+			erogenous_input.type = "checkbox";
+			erogenous_input.checked = true;
+			erogenous_span.append(erogenous_input);
+			li.append(erogenous_span);
+		}
+
+		text_span.className = "title";
+		if(typeof item == "object") text_span.textContent = item.title;
+		else text_span.textContent = item;
+		label.append(text_span);
+
+		enabled_span.className = "enabled";
+		enabled_input.type = "checkbox";
+		enabled_input.checked = true;
+		enabled_span.append(enabled_input);
+		label.append(enabled_span);
+
 		li.append(label);
-
 		ul.append(li);
 	});
 
 	return ul;
 }
 
-var make_tord_category = function(title, items) {
-	var li = document.createElement("li");
-	li.textContent = title;
-	li.className = "category";
-	items.forEach(function(item) {
-		var sub_li = document.createElement("li");
-		var label = document.createElement("label");
-		var span = document.createElement("span");
-		var input = document.createElement("input");
-		input.type = "checkbox";
-		input.checked = true;
-		label.textContent = item.title;
-
-		span.append(input);
-		label.append(span);
-		sub_li.append(label);
-
-		li.append(sub_li);
-	});
-
-	return li;
-}
-
 var select_defaults = function() {
-	var everyone_has_these = ["Mouth","Cheeks","Nipples","Ass cheeks","Ass","Phone"];
-	everyone_has_these.forEach(function(part) {
-		$("li:contains('" + part + "')").find("input").prop("checked", true);
+	$(".available#parts span.enabled input").prop("checked", false);
+	$(".available#toys span.enabled input").prop("checked", false);
+
+	var EVERYONE_HAS_THESE = ["Mouth","Cheeks","Nipples","Ass cheeks","Ass","Phone"];
+	var NOT_EVERYONE_LIKES_THESE = ["Cheeks","Ass cheeks","Ass"];
+
+	EVERYONE_HAS_THESE.forEach(function(part) {
+		$(".available li:contains('" + part + "') span.enabled input").prop("checked", true);
+	});
+	NOT_EVERYONE_LIKES_THESE.forEach(function(part) {
+		$(".available#parts li:contains('" + part + "') span.erogenous input").prop("checked", false);
 	});
 }
 
@@ -119,55 +94,69 @@ var select_defaults = function() {
 // 	});
 // }
 
-var set_modes = function() {
-	var game = this[$("#game select").children(":selected").attr("value")];
-	var triggers = get_all_triggers([game]);
+var get_modes = function(game) {
+	var triggers = game["Triggers"];
 	var modes = new Set();
 
-	triggers.forEach(function(trigger) {
-		if(trigger.modes) trigger.modes.forEach(function(mode) {
-			modes.add(mode);
+	for(var category in triggers) {
+		// console.log(triggers[category])
+		triggers[category].forEach(function(trigger) {
+			if(trigger.modes) trigger.modes.forEach(function(mode) {
+				modes.add(mode);
+			});
 		});
-	});
+	}	
 
-	modes.forEach(function(mode) {
-		var row = document.createElement("li");
-		var label = document.createElement("label");
-		label.textContent = mode;
-		var span = document.createElement("span");
-		var checkbox = document.createElement("input");
-		checkbox.type = "checkbox";
-		checkbox.checked = true;
-		span.append(checkbox);
-		label.append(span);
-		row.append(label);
-
-		$("#modes").append(row);
-	});
+	return Array.from(modes);
 }
 
-var fill_triggers = function() {
+var fill_lists = function() {
 	var game = this[$("#game select").children(":selected").attr("value")];
-	var game_triggers = [get_all_triggers([game], "when"), get_all_triggers([game], "during")];
-	var default_triggers = [get_all_triggers([defaults], "when"), get_all_triggers([defaults], "during")];
 
-	$("#triggers #game-specific").append(make_tord_category("Every time:", game_triggers[0]));
-	$("#triggers #game-specific").append(make_tord_category("During the time:", game_triggers[1]));
+	var trigger_list = {"divs":["game-specific triggers", "universal triggers"], "pools":[game["Triggers"], defaults["Triggers"]], "erogenous":[false, false]};
+	var task_list = {"divs":["game-specific tasks", "universal tasks"], "pools":[game["Tasks"], defaults["Tasks"]], "erogenous":[false, false]};
+	var available_list = {"divs":["parts","toys"], "pools":[availables["Available parts"], availables["Available toys"]], "erogenous":[true, false]};
+	var modes_list = {"divs":["modes"], "pools":[get_modes(game)], "erogenous":[false]};
 
-	$("#triggers #universal").append(make_tord_category("Every time:", default_triggers[0]));
-	$("#triggers #universal").append(make_tord_category("During the time:", default_triggers[1]));
+	var lists = [trigger_list, task_list, available_list, modes_list];
+
+	// For each list we've got...
+	lists.forEach(function(list) {
+		// console.log(list);
+		// For each div we're filling with that list...
+		for(var i=0; i<list.divs.length; i++) {
+			// Get the div...
+			var div = $("[id='" + list.divs[i] + "']");
+			// If it's just a list, go for it
+			// console.log(list.pools[i]);
+			if(list.pools[i].length) {
+				div.append(make_ul(list.pools[i], list.erogenous[i]));
+			} else {
+				// if it's an object with categories, loop it instead.
+				for(var category in list.pools[i]) {
+					div.append(category);
+					div.append(make_ul(list.pools[i][category], list.erogenous[i]));
+				}
+			}
+		}
+	});
 }
 
-var fill_availables = function() {
-	var sections = ["parts", "toys"];
-	sections.forEach(function(section) {
-		var div = $("#" + section);
-		for(var category in availables["Available " + section]) {
-			div.append(category);
-			var ul = document.createElement("ul");
-			ul.append(make_available_category(category, availables["Available " + section][category]));
-			div.append(ul);
+var grey_unchecked = function() {
+
+	$("span.enabled :checkbox").change(function() {
+		if(this.checked) {
+			$(this).closest("li").find("span.title").animate({opacity: 1});
+			$(this).closest("li").find("span.erogenous").animate({opacity: 1});
+		} else {
+			$(this).closest("li").find("span.title").animate({opacity: .5});
+			$(this).closest("li").find("span.erogenous").animate({opacity: .5});
 		}
+	});
+
+	$("li:has(span.enabled input:checkbox:not(:checked))").each(function() {
+		$(this).find("span.title").css("opacity", .5);
+		$(this).find("span.erogenous").css("opacity", .5);
 	});
 }
 
@@ -187,7 +176,7 @@ var split_line = function(line) {
 
 var fill_archetype = function(line) {
 
-	var archetypes = {"bodypart": get_boxes("parts", true), "toys": get_boxes("toys", true)};
+	var archetypes = {"bodypart": get_boxes("parts", "enabled", true), "erogenous_zone": get_boxes("parts", "erogenous", true), "toy": get_boxes("toys", "enabled", true)};
 
 	while(line.includes("$")) {
 		var match = line.match(/\$(.*?)\$/);
@@ -204,6 +193,8 @@ var fill_archetype = function(line) {
 //NATURAL LANGUAGE
 
 var pronounize = function(line) {
+	console.log(line);
+
 	var exceptions = {"is": "are"};
 	var words = line.split(" ");
 	var first_word = words[0];
@@ -222,21 +213,19 @@ var pronounize = function(line) {
 
 //THE REST
 
-var get_available = function(div_id) {
-	available = [];
+var get_random_tord = function(pools, exceptions) {
+	var all_tords = [];
+	for(var pool of pools) {
+		for(var category in pool) {
+			for(var item of pool[category]) {
+				all_tords.push(item);
+			}
+		}
+	}
 
-	$("#Available" + "\\ " + div_id).find("label").get().forEach(function(lab) {
-		if($(lab).find("input").is(":checked")) available.push($(lab).text());
-	});
-
-	return available;
-}
-
-var get_random_tord = function(pool, exceptions) {
-	var tords = [];
-
+	var possible_tords = [];
 	// for each tord object...
-	pool.forEach(function(tord) {
+	all_tords.forEach(function(tord) {
 		// compare it with every type of exception...
 		for(var key in exceptions) {
 			// if the object has a need for something from that type...
@@ -252,17 +241,17 @@ var get_random_tord = function(pool, exceptions) {
 		}
 
 		// otherwise, push it!
-		tords.push(tord);
+		possible_tords.push(tord);
 	});
 
-	return tords.random();
+	return possible_tords.random();
 }
 
-var get_boxes = function(div_id, is_checked) {
+var get_boxes = function(div_id, span_class, is_checked) {
 	var boxes = [];
 
 	$("#" + div_id + " label").each(function() {
-		if($(this).find("input").is(":checked") == is_checked) boxes.push(this.textContent);
+		if($(this).find("span." + span_class + " input").is(":checked") == is_checked) boxes.push(this.textContent);
 	});
 
 	return boxes;
@@ -276,7 +265,7 @@ var randomize = function() {
 	$("#title").find("h2").fadeTo(1000, 0, function() {
 		var trigger = get_trigger(game);
 		if(!trigger) return;
-		var when = get_when(trigger, get_all_triggers([defaults, game], "during"));
+		var when = get_when(trigger, defaults["Triggers"]["during"].concat(game["Triggers"]["during"]));
 		var who = get_who(trigger);
 		var task = get_what(defaults, game);
 		
@@ -293,7 +282,7 @@ var randomize = function() {
 }
 
 var get_trigger = function(game) {
-	var trigger_pool = get_all_triggers([defaults, game]);
+	var trigger_pool = [defaults["Triggers"], game["Triggers"]];
 	var exceptions = {"title": get_boxes("triggers", false), "modes": get_boxes("modes", false)};
 	return get_random_tord(trigger_pool, exceptions);
 }
@@ -312,7 +301,7 @@ var get_who = function(trigger) {
 }
 
 var get_what = function(defaults, game) {
-	var task_pool = get_all_tasks([defaults, game]);
+	var task_pool = [defaults["Tasks"], game["Tasks"]];
 	var task = get_random_tord(task_pool, {});
 	return task;
 }
@@ -320,13 +309,15 @@ var get_what = function(defaults, game) {
 $(document).ready(function() {
 	// General
 	// populate_seriousnesses();
-	fill_availables();
+	fill_lists();
 	select_defaults();
 
-	// Game-specific
-	set_modes();
-	fill_triggers();
+	// Visuals
+	grey_unchecked();
 
 	// Random task
 	randomize();
+
+	// Put focus
+	$("#reroll").focus();
 });

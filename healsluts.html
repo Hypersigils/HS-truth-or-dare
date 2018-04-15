@@ -7,12 +7,12 @@
 	<script src="JSON/diablo_3.js"></script>
 	<link rel="stylesheet" type="text/css" href="style.css"></style>
 </head>
-<body style="background-image: url('backgrounds/li-ming1.jpg'); background-repeat: no-repeat;">
-<!-- <body style="background-color: black;"> -->
+<!-- <body style="background-image: url('backgrounds/li-ming1.jpg'); background-repeat: no-repeat;"> -->
+<body style="background-color: black;">
 	<div id="content" class="white">
 		<div class="row" id="top">
-			<div class="column">
-				<div id="title" class="white" style="width: 700px;">
+			<div class="column" style="flex-grow: 1;">
+				<div id="title" class="white" style="max-width: 700px; align-self: center;">
 					<h2 style="text-align: center;">
 						<span id="when" style="color: red;">When?</span> 
 						<span id="who" style="color: mediumseagreen;">Who?</span> 
@@ -23,12 +23,16 @@
 			</div>
 			<div class="column">
 				<div class="white" style="display: flex; align-items: center; flex-grow: 1">
-					<button onclick="randomize()" style="height: 50px; font-size: 12pt; font-weight: bold;">Reroll</button>
+					<button onclick="randomize()" style="height: 50px; font-size: 12pt; font-weight: bold;" id="reroll">Reroll</button>
 				</div>
 			</div>
+			<!-- <div class="column white" style="display: flex; flex-direction: column;">
+				<button>Save</button>
+				<button>Load</button>
+			</div> -->
 		</div>
 		<div class="row" id="bottom">
-			<div class="column" id="left">
+			<div class="column">
 				<div id="game" class="white"><h3>Game:</h3> 
 					<select style="width: -webkit-fill-available;">
 						<option value=diablo_3>Diablo 3</option>
@@ -36,8 +40,6 @@
 				</div>
 				<div class="white" id="modes">
 					<h3>Modes</h3>
-					<ul>
-					</ul>
 				</div>
 			</div>
 			<div class="column" id="middle">
@@ -48,32 +50,41 @@
 					<h3>Available toys</h3>
 				</div>
 			</div>
-			<div class="column" id="right">
+			<div class="column">
 				<div id="triggers" class="white">
 					<h3>Triggers</h3>
+					Game-specific
 					<div class="white">
-						Game-specific
-						<div class="edit">
-							<ul id="game-specific">
-							</ul>
+						<div class="edit" id="game-specific triggers">
 						</div>
 					</div>
+					Universal
 					<div class="white" style="margin-bottom: 0px;">
-						Universal
-						<div class="edit">
-							<ul id="universal">
-							</ul>
+						<div class="edit" id="universal triggers">
 						</div>
 					</div>
 				</div>
-				<div class="white">
-					<button>Save</button>
-					<button>Load</button>
+			</div>
+			<div class="column">
+				<div id="tasks" class="white">
+					<h3>Tasks</h3>
+					Game-specific
+					<div class="white">
+						<div class="edit" id="game-specific tasks">
+						</div>
+					</div>
+					Universal
+					<div class="white" style="margin-bottom: 0px;">
+						<div class="edit" id="universal tasks">
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 	
+
+
 <script src="script.js"></script>
 </body>
 </html>

@@ -12,13 +12,8 @@
 	flex-direction: column;
 }
 
-#bottom .column {
+#bottom .column:first-child, #bottom .column:nth-child(2) {
 	width: 180px;
-}
-
-#right {
-	flex-grow: 1;
-	width: auto;
 }
 
 .row {
@@ -53,7 +48,7 @@ h3 {
 	width: fit-content;
 }
 
-span {
+#title span {
 	text-shadow: 1px 1px black;
 }
 
@@ -63,6 +58,7 @@ ul {
 }
 
 li {
+	display: flex;
 	user-select: none;
 	overflow: hidden;
 	font-style: italic;
@@ -70,18 +66,24 @@ li {
 	list-style-type: none;
 }
 
+span.title {
+	flex-grow: 1;
+}
+
 li #category {
 	padding-left: 0px;
 }
 
 li input {
-	vertical-align: middle;
+	vertical-align: bottom;
+	opacity: 1;
 }
 
 label {
 	display: block;
+	width: 100%;
 }
 
-label span {
+label span:last-child {
 	float: right;
 }
