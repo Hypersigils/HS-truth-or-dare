@@ -6,9 +6,14 @@ var defaults = {
 			},
 			{
 				"title": "completes an objective"
+			},
+			{
+				"title": "touch your partner's character model",
+				"requirements": ["partner"],
+				"who": ["you"]
 			}
 		],
-		"during": [
+		"while": [
 			{
 				"title": "is talking"
 			},
@@ -22,13 +27,12 @@ var defaults = {
 	"Tasks": {
 		"truths": [
 			{
-				"title": "talk about a kink you want to write",
+				"title": "talk about a kink you want to explore",
 				"lewd": true,
 				"intimacy": 1
 			},
 			{
 				"title": "say your [favorite/least favorite] thing about [your partner/yourself]",
-				"lewd": false,
 				"intimacy": 2
 			},
 			{
@@ -38,12 +42,10 @@ var defaults = {
 			},
 			{
 				"title": "name something that makes you [happy/sad/angry/annoyed]",
-				"lewd": false,
 				"intimacy": 0
 			},
 			{
 				"title": "name something you're thankful for about your partner",
-				"lewd": false,
 				"intimacy": 2
 			},
 			{
@@ -53,13 +55,40 @@ var defaults = {
 			},
 			{
 				"title": "describe a hobby you [have/want to have]",
-				"lewd": false,
 				"intimacy": 0
+			},
+			{
+				"title": "describe a taboo fantasy",
+				"lewd": true,
+				"intimacy": 2
+			},
+			{
+				"title": "describe your worst relationship",
+				"intimacy": 1
+			},
+			{
+				"title": "confess a dirty secret",
+				"lewd": true,
+				"intimacy": 2
+			},
+			{
+				"title": "describe a time you broke the law",
+				"intimacy": 1
+			},
+			{
+				"title": "describe a time you almost got caught doing something dirty",
+				"lewd": true,
+				"intimacy": 2
+			},
+			{
+				"title": "describe a fantasy of yours",
+				"lewd": true,
+				"intimacy": 2
 			}
 		],
 		"dares": [
 			{
-				"title": "tease your $bodypart$ [lightly/strongly/harshly] [on bare skin/through your clothes]",
+				"title": "tease your $erogenous_zone$ [lightly/strongly/harshly] [on bare skin/through your clothes]",
 				"lewd": true,
 				"intimacy": 1
 			},
@@ -79,13 +108,12 @@ var defaults = {
 				"intimacy": 1
 			},
 			{
-				"title": "tease your $bodypart$",
+				"title": "tease your $erogenous_zone$",
 				"lewd": true,
 				"intimacy": 1
 			},
 			{
 				"title": "give your partner your best flirt",
-				"lewd": false,
 				"intimacy": 1,
 				"requirements": ["partner"]
 			},
@@ -97,21 +125,106 @@ var defaults = {
 			},
 			{
 				"title": "blow your partner a kiss",
-				"lewd": false,
 				"intimacy": 1,
 				"requirements": ["partner"]
 			},
 			{
 				"title": "repeat what your partner says",
-				"lewd": false,
 				"intimacy": 0,
 				"requirements": ["partner"]
 			},
 			{
 				"title": "[thank/apologize to/praise] your partner",
-				"lewd": false,
 				"intimacy": 1,
 				"requirements": ["partner"]
+			},
+			{
+				"title": "[moan/moan your partner's name]",
+				"lewd": true,
+				"intimacy": 2,
+				"requirements": ["noise"]
+			},
+			{
+				"title": "rub against a pillow",
+				"lewd": true,
+				"intimacy": 2
+			},
+			{
+				"title": "talk dirty",
+				"lewd": true,
+				"intimacy": 2
+			},
+			{
+				"title": "beg your partner about something of their choosing",
+				"lewd": true,
+				"intimacy": 2,
+				"requirements": ["partner"]
+			},
+			{
+				"title": "invert your power roles",
+				"intimacy": 4
+			},
+			{
+				"title": "follow one command involving your $toy$",
+				"lewd": true,
+				"intimacy": 3
+			},
+			{
+				"title": "pinch your $erogenous_zone$",
+				"lewd": true,
+				"intimacy": 2
+			},
+			{
+				"title": "take off your $clothing$",
+				"lewd": true,
+				"intimacy": 1
+			},
+			{
+				"title": "tug your underwear up",
+				"lewd": true,
+				"intimacy": 2,
+				"requirements": ["Vagina"]
+			},
+			{
+				"title": "share one of your favorite naughty videos",
+				"lewd": true,
+				"intimacy": 1
+			},
+			{
+				"title": "bounce up and down",
+				"intimacy": 0,
+				"requirements": ["Breasts"]
+			},
+			{
+				"title": "repeat after your partner",
+				"intimacy": 1,
+				"when": ["during the"]
+			},
+			{
+				"title": "play with yourself loudly",
+				"lewd": true,
+				"intimacy": 3
+			},
+			{
+				"title": "send a picture of the mess you're making",
+				"lewd": true,
+				"intimacy": 4,
+				"when": ["every"]
+			},
+			{
+				"title": "send a picture where your [breasts are/nipples are/dick is] barely hidden",
+				"lewd": true,
+				"intimacy": 3
+			},
+			{
+				"title": "play with your $toy$ like you would your partner",
+				"lewd": true,
+				"intimacy": 2
+			},
+			{
+				"title": "take orders on how to touch your $erogenous_zone$",
+				"lewd": true,
+				"intimacy": 3
 			}
 		]
 	}

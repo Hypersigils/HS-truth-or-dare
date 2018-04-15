@@ -53,7 +53,7 @@ var diablo_3 = {
 				"title": "finds a white item"
 			}
 		],
-		"during": [
+		"while": [
 			{
 				"title": "is in avatar modes (e.g. Archon)"
 			},
@@ -63,7 +63,7 @@ var diablo_3 = {
 			},
 			{
 				"title": "are listening to a journal",
-				"modes": ["Adventure"],
+				"modes": ["Story"],
 				"who": ["you"]
 			},
 			{
@@ -82,6 +82,9 @@ var diablo_3 = {
 		"truths": [
 		],
 		"dares": [
+			{
+				"title": "play an objective without a piece of essential gear"
+			}
 		]
 	}
 }
