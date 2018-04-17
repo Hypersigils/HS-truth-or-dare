@@ -212,7 +212,7 @@ var defaults = {
 				"when": ["every"]
 			},
 			{
-				"title": "send a picture where your [breasts are/nipples are/dick is] barely hidden",
+				"title": "send a picture with your $erogenous_zone$ barely hidden",
 				"lewd": true,
 				"intimacy": 3
 			},

@@ -3,6 +3,7 @@ var EROGENOUS_ZONES = ["Mouth","Nipples","Ass","Breasts","Clitoris","Vulva","Vag
 var TITLE_SPANS = ["when","who","does","what"];
 var current_instruction = null;
 var active_instructions = [];
+var active_game = null;
 
 //OBJECTS
 class Instruction {
@@ -30,7 +31,7 @@ class Instruction {
 
 	roll_does() {
 		var trigger_pool = [this.default_pool["Triggers"], this.game_pool["Triggers"]];
-		var exceptions = {"title": getCheckedBoxes("triggers", "enabled", false), "modes": getCheckedBoxes("modes", "enabled", false), "restrictions": getCheckedBoxes("restrictions", "enabled", false), "settings": getCheckedBoxes("settings", "enabled", false)};
+		var exceptions = getExceptions("trigger");
 		this.trigger = getRandomTorD(trigger_pool, exceptions);
 
 		this.roll_when();
@@ -45,7 +46,9 @@ class Instruction {
 
 	roll_what() {
 		var task_pool = [this.default_pool["Tasks"], this.game_pool["Tasks"]];
-		var task = getRandomTorD(task_pool, {"when":[this.when]});
+		var exceptions = getExceptions("task");
+		exceptions.when = [this.when];
+		var task = getRandomTorD(task_pool, exceptions);
 		this.task = task;
 
 		var what = task.title;
@@ -100,7 +103,7 @@ String.prototype.splitOptions = function() {
 String.prototype.replaceArchetype = function() {
 	var string = this.toString();
 
-	var archetypes = {"bodypart": getCheckedBoxes("parts", "enabled", true), "erogenous_zone": EROGENOUS_ZONES, "toy": getCheckedBoxes("toys", "enabled", true)};
+	var archetypes = {"bodypart": getCheckedBoxes($("#parts li :checkbox"), true), "erogenous_zone": EROGENOUS_ZONES, "toy": getCheckedBoxes($("#toys li :checkbox"), true)};
 	while(string.includes("$")) {
 		var match = string.match(/\$(.*?)\$/);
 		if(archetypes[match[1]]) {
@@ -183,6 +186,16 @@ var selectDefaults = function() {
 		$("#parts li:contains('" + part + "') span.enabled input").prop("checked", true);
 		$("#toys li:contains('" + part + "') span.enabled input").prop("checked", true);
 	});
+
+	var JUST_ENOUGH_LEWD = [0, 1, 2];
+	JUST_ENOUGH_LEWD.forEach(function(rating) {
+		$("#lewdness input[value='" + rating + "']").prop("checked", true);
+	});
+
+	var JUST_ENOUGH_INTIMACY = [0, 1];
+	JUST_ENOUGH_INTIMACY.forEach(function(rating) {
+		$("#intimacy input[value='" + rating + "']").prop("checked", true);
+	});
 }
 
 var fillLists = function() {
@@ -251,17 +264,15 @@ var addMinimizeListeners = function() {
 }
 
 var setBackground = function(game) {
-	var backgrounds = [];
-	$.ajax({
-	  url: "backgrounds/diablo_3",
-	  success: function(data){
-	     $(data).find("a:contains(.jpg)").each(function(){
-	        // will loop through 
-	        var images = $(this).attr("href");
-	        console.log(images);
-	     });
-	  }
-	});
+	var backgrounds = {"barbarian":1, "crusader":2, "demon_hunter":5, "diablo":1, "leah":1, "monk":4, "necromancer":3, "witch_doctor":1, "wizard":3}
+	var images = []
+	for(var character in backgrounds) {
+		for(var i=0; i<backgrounds[character]; i++) {
+			images.push(character + (i + 1) + ".jpg");
+		}
+	}
+
+	$("body").animate("slow").css("background-image", "url(backgrounds/" + game + "/" + images.random() + ")");
 }
 
 //JSON OBJECT INTERPRETATION
@@ -280,6 +291,7 @@ var getTypesOfAttribute = function(pool, attribute) {
 }
 
 var getRandomTorD = function(pools, exceptions) {
+	// console.log(exceptions);
 	var all_tords = [];
 	for(var pool of pools) {
 		for(var category in pool) {
@@ -292,17 +304,22 @@ var getRandomTorD = function(pools, exceptions) {
 	var possible_tords = [];
 	// for each tord object...
 	all_tords.forEach(function(tord) {
+		// console.log(tord);
 		// compare it with every type of exception...
 		for(var key in exceptions) {
+			// console.log(key);
 			// if the object has a need for something from that type...
 			var needs = tord[key];
-			if(needs) {
+			if(needs != null) {
 				// if this is not a list, make it one. Thanks .js.
 				if(typeof needs != "object") var needs = [needs];
 				// if it has a need for one included in the exceptions, break!
 				if(exceptions[key].some(function(exception) {
 					return needs.includes(exception);
-				})) return;
+				})) {
+					// console.log("we found this one. Bye bye tord!");
+					return;
+				}
 			}
 		}
 
@@ -314,14 +331,35 @@ var getRandomTorD = function(pools, exceptions) {
 }
 
 //HTML INTERPRETATION
-var getCheckedBoxes = function(div_id, span_class, is_checked) {
-	var boxes = [];
+var getExceptions = function(tord) {
+	var exceptions = {};
 
-	$("#" + div_id + " li").each(function() {
-		if($(this).find("span." + span_class + " input").is(":checked") == is_checked) boxes.push(this.textContent);
+	if(tord === "trigger") {
+		exceptions.title = getCheckedBoxes($("#triggers li :checkbox"), false);
+		exceptions.modes = getCheckedBoxes($("#modes li :checkbox"), false);
+	} else if(tord === "task") {
+		if(!$("#lewd :checkbox").is(":checked")) exceptions.lewd = [true];
+		exceptions.title = getCheckedBoxes($("#tasks li :checkbox"), false);
+		exceptions.parts = getCheckedBoxes($("#parts li :checkbox"), false);
+		exceptions.toys = getCheckedBoxes($("#toys li :checkbox"), false);
+		exceptions.intimacy = $.map($("#intimacy :checkbox:not(:checked)"), function(box) {
+			return parseInt($(box).val());
+		});
+	}
+
+	return exceptions;
+}
+
+var getCheckedBoxes = function(inputs, is_checked) {
+	var titles = [];
+
+	$(inputs).each(function() {
+		if(this.checked == is_checked) {
+			titles.push($(this).closest("li").find("span.title").text());
+		}
 	});
 
-	return boxes;
+	return titles;
 }
 
 // THAT GOOD RANDOM
@@ -352,5 +390,5 @@ $(document).ready(function() {
 	$("#reroll").focus();
 
 	// Set background
-	setBackground(this[$("#game select").children(":selected").attr("value")]);
+	setBackground($("#game select").children(":selected").attr("value"));
 });
