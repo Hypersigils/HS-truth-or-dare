@@ -7,12 +7,12 @@
 	<script src="JSON/diablo_3.js"></script>
 	<link rel="stylesheet" type="text/css" href="style.css"></style>
 </head>
-<body style="background-image: url('backgrounds/li-ming1.jpg');">
-<body style="background-color: black;">
+<!-- <body style="background-image: url('backgrounds/li-ming1.jpg');"> -->
+<body style="background-color: black; display: flex; align-items: center; justify-content: center;">
 	<div id="content" class="white">
 		<div class="row" id="top">
 			<div class="column" style="flex-grow: 1;">
-				<div id="title" class="white" style="max-width: 700px; align-self: center;">
+				<div id="title" class="white">
 					<h2 style="text-align: center;">
 						<span id="when" style="color: red;">When?</span> 
 						<span id="who" style="color: mediumseagreen;">Who?</span> 
@@ -26,10 +26,6 @@
 					<button onclick="randomize()" style="height: 50px; font-size: 12pt; font-weight: bold;" id="reroll">Reroll</button>
 				</div>
 			</div>
-			<!-- <div class="column white" style="display: flex; flex-direction: column;">
-				<button>Save</button>
-				<button>Load</button>
-			</div> -->
 		</div>
 		<div class="row" id="bottom">
 			<div class="column">
@@ -40,36 +36,51 @@
 				</div>
 				<div class="white" id="modes">
 					<h3>Modes</h3>
+					<div class="white minimize">-</div>
+					<div class="hide"></div>
 				</div>
 				<div class="white" id="roles">
 					<h3>Roles</h3>
+					<div class="white minimize">-</div>
+					<div class="hide"></div>
 				</div>
 				<div class="white" id="restrictions">
 					<h3>Restrictions</h3>
+					<div class="white minimize">-</div>
+					<div class="hide"></div>
 				</div>
 				<div class="white" id="details">
 					<h3>Settings</h3>
+					<div class="white minimize">-</div>
+					<div class="hide"></div>
 				</div>
 			</div>
 			<div class="column" id="middle">
 				<div class="white" id="parts">
 					<h3>Available parts</h3>
+					<div class="white minimize">-</div>
+					<div class="hide"></div>
 				</div>
 				<div class="white" id="toys">
 					<h3>Available toys</h3>
+					<div class="white minimize">-</div>
+					<div class="hide"></div>
 				</div>
 			</div>
 			<div class="column">
 				<div id="triggers" class="white">
 					<h3>Triggers</h3>
-					Game-specific
-					<div class="white">
-						<div class="edit" id="game-specific triggers">
+					<div class="white minimize">+</div>
+					<div class="hide" style="display: none;">
+						<br>Game-specific
+						<div class="white">
+							<div class="edit" id="game-specific triggers">
+							</div>
 						</div>
-					</div>
-					Universal
-					<div class="white" style="margin-bottom: 0px;">
-						<div class="edit" id="universal triggers">
+						Universal
+						<div class="white" style="margin-bottom: 0px;">
+							<div class="edit" id="universal triggers">
+							</div>
 						</div>
 					</div>
 				</div>
@@ -77,14 +88,17 @@
 			<div class="column">
 				<div id="tasks" class="white">
 					<h3>Tasks</h3>
-					Game-specific
-					<div class="white">
-						<div class="edit" id="game-specific tasks">
+					<div class="white minimize">+</div>
+					<div class="hide" style="display: none;">
+						<br>Game-specific
+						<div class="white">
+							<div class="edit" id="game-specific tasks">
+							</div>
 						</div>
-					</div>
-					Universal
-					<div class="white" style="margin-bottom: 0px;">
-						<div class="edit" id="universal tasks">
+						Universal
+						<div class="white" style="margin-bottom: 0px;">
+							<div class="edit" id="universal tasks">
+							</div>
 						</div>
 					</div>
 				</div>

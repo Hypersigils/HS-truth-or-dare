@@ -225,6 +225,10 @@ var defaults = {
 				"title": "take orders on how to touch your $erogenous_zone$",
 				"lewd": true,
 				"intimacy": 3
+			},
+			{
+				"title": "play an objective without a piece of essential gear",
+				"intimacy": 0
 			}
 		]
 	}

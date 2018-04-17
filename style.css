@@ -1,7 +1,7 @@
 #content {
 	display: flex; 
 	flex-direction: column; 
-	width: fit-content; 
+	width: max-content; 
 	margin: 20px;
 	margin-left: 0px;
 	padding: 0px;
@@ -37,6 +37,17 @@
 	margin-bottom: 10px;
 }
 
+.minimize {
+	width: 6px;
+	float: right;
+	padding: 2px;
+	padding-left: 8px;
+	padding-right: 8px;
+	border-radius: 6px;
+	user-select: none;
+	cursor: pointer;
+}
+
 .edit {
 	max-height: 200px;
 	overflow-y: scroll;
@@ -44,12 +55,25 @@
 
 h3 {
 	margin-top: 0px;
+	margin-right: 10px;
 	background-color: rgba(0, 0, 0, .2);
 	width: fit-content;
+	display: inline-block;
+}
+
+#title {
+	max-width: 700px; 
+	height:100px; 
+	align-self: center; 
+	display: flex; 
+	align-items: center; 
+	padding-left: 50px; 
+	padding-right: 50px;
 }
 
 #title span {
 	text-shadow: 1px 1px black;
+	cursor: hand;
 }
 
 ul {

@@ -1,18 +1,15 @@
 //VARIABLES
 var EROGENOUS_ZONES = ["Mouth","Nipples","Ass","Breasts","Clitoris","Vulva","Vagina","Dick"];
+var TITLE_SPANS = ["when","who","does","what"];
 var current_instruction = null;
+var active_instructions = [];
 
 //OBJECTS
 class Instruction {
-	constructor(trigger, default_pool, game_pool) {
-		this.trigger = trigger;
-
+	constructor(default_pool, game_pool) {
 		this.default_pool = default_pool;
 		this.game_pool = game_pool;
 
-		this.roll_when();
-		this.roll_task();
-		this.roll_who();
 		this.roll_does();
 		this.roll_what();
 	}
@@ -24,12 +21,6 @@ class Instruction {
 		this.when = when;
 	}
 
-	roll_task() {
-		var task_pool = [this.default_pool["Tasks"], this.game_pool["Tasks"]];
-		var task = getRandomTorD(task_pool, {"when":[this.when]});
-		this.task = task;
-	}
-
 	roll_who() {
 		var who = "[you/your partner/anyone]"
 		if(this.trigger.who) who = this.trigger.who.random();
@@ -38,6 +29,13 @@ class Instruction {
 	}
 
 	roll_does() {
+		var trigger_pool = [this.default_pool["Triggers"], this.game_pool["Triggers"]];
+		var exceptions = {"title": getCheckedBoxes("triggers", "enabled", false), "modes": getCheckedBoxes("modes", "enabled", false), "restrictions": getCheckedBoxes("restrictions", "enabled", false), "settings": getCheckedBoxes("settings", "enabled", false)};
+		this.trigger = getRandomTorD(trigger_pool, exceptions);
+
+		this.roll_when();
+		this.roll_who();
+
 		var does = this.trigger.title;
 		does = does.splitOptions();
 		does = does.replaceArchetype();
@@ -46,25 +44,26 @@ class Instruction {
 	}
 
 	roll_what() {
-		var what = this.task.title;
+		var task_pool = [this.default_pool["Tasks"], this.game_pool["Tasks"]];
+		var task = getRandomTorD(task_pool, {"when":[this.when]});
+		this.task = task;
+
+		var what = task.title;
 		what = what.splitOptions();
 		what = what.replaceArchetype();
 		this.what = what;
 	}
 
 	updateHeader(span_id) {
-		var ALL_IDS = ["when", "who", "does", "what"];
 		if(span_id) {
-			var text = this[span_id];
-			if(span_id == "when") text = text.charAt(0).toUpperCase() + text.slice(1);
-			$("#" + span_id).textContent = this[span_id];
+			var string = this[span_id];
+			if(span_id == "when") string = string.charAt(0).toUpperCase() + string.slice(1);
+			$("#" + span_id).fadeOut(1000, function() {
+					$(this).text(string).fadeIn(1000);
+				});
 		} else {
-			for(var id of ALL_IDS) {
-				var text = this[id];
-				if(id == "when") {
-					text = text.charAt(0).toUpperCase() + text.slice(1);
-				}
-				$("#" + id).text(text);
+			for(var id of TITLE_SPANS) {
+				this.updateHeader(id);
 			}
 		}
 	}
@@ -189,11 +188,11 @@ var selectDefaults = function() {
 var fillLists = function() {
 	var game = this[$("#game select").children(":selected").attr("value")];
 
-	var trigger_list = {"divs":["game-specific triggers", "universal triggers"], "pools":[game["Triggers"], defaults["Triggers"]], "secondary":[null, null]};
-	var task_list = {"divs":["game-specific tasks", "universal tasks"], "pools":[game["Tasks"], defaults["Tasks"]], "secondary":[null, null]};
-	var available_list = {"divs":["parts","toys"], "pools":[availables["Available parts"], availables["Available toys"]], "secondary":[null, null]};
-	var modes_list = {"divs":["modes"], "pools":[getTypesOfAttribute(game["Triggers"], "modes")], "secondary":[null]};
-	var roles_list = {"divs":["modes"], "pools":[getTypesOfAttribute(game["Triggers"], "roles")], "secondary":[null]};
+	var trigger_list = {"divs":[$("[id='game-specific triggers']"), $("[id='universal triggers']")], "pools":[game["Triggers"], defaults["Triggers"]]};
+	var task_list = {"divs":[$("[id='game-specific tasks']"), $("[id='universal tasks']")], "pools":[game["Tasks"], defaults["Tasks"]]};
+	var available_list = {"divs":[$("#parts .hide"), $("#toys .hide")], "pools":[availables["Available parts"], availables["Available toys"]]};
+	var modes_list = {"divs":[$("#modes .hide")], "pools":[getTypesOfAttribute(game["Triggers"], "modes")]};
+	var roles_list = {"divs":[$("#roles .hide")], "pools":[getTypesOfAttribute(game["Triggers"], "roles")]};
 
 	var lists = [trigger_list, task_list, available_list, modes_list, roles_list];
 
@@ -201,16 +200,15 @@ var fillLists = function() {
 	lists.forEach(function(list) {
 		// For each div we're filling with that list...
 		for(var i=0; i<list.divs.length; i++) {
-			// Get the div...
-			var div = $("[id='" + list.divs[i] + "']");
+			var div = list.divs[i].get(0);
 			// If it's just a list, go for it
 			if(list.pools[i].length != null) {
-				div.append(makeUL(list.pools[i], list.secondary[i]));
+				div.append(makeUL(list.pools[i]));
 			} else {
 				// if it's an object with categories, loop it instead.
 				for(var category in list.pools[i]) {
 					div.append(category);
-					div.append(makeUL(list.pools[i][category], list.secondary[i]));
+					div.append(makeUL(list.pools[i][category]));
 				}
 			}
 		}
@@ -229,6 +227,40 @@ var greyUnchecked = function() {
 
 	$("li:has(span.enabled input:checkbox:not(:checked))").each(function() {
 		$(this).find("span.title").css("opacity", .5);
+	});
+}
+
+var addTitleListeners = function() {
+	for(var span of TITLE_SPANS) {
+		$("#" + span).click(function() {
+			current_instruction["roll_" + $(this).attr('id')]();
+			current_instruction.updateHeader($(this).attr('id'));
+		});
+	}
+}
+
+var addMinimizeListeners = function() {
+	$(".minimize").click(function() {
+		if($(this).text() == "+") {
+			$(this).text("-");
+		} else {
+			$(this).text("+");
+		}
+		$(this).parent().find(".hide").toggle("slow");
+	});
+}
+
+var setBackground = function(game) {
+	var backgrounds = [];
+	$.ajax({
+	  url: "backgrounds/diablo_3",
+	  success: function(data){
+	     $(data).find("a:contains(.jpg)").each(function(){
+	        // will loop through 
+	        var images = $(this).attr("href");
+	        console.log(images);
+	     });
+	  }
 	});
 }
 
@@ -296,27 +328,19 @@ var getCheckedBoxes = function(div_id, span_class, is_checked) {
 var randomize = function() {
 	var game = this[$("#game select").children(":selected").attr("value")];
 
-	$("#title h2").fadeTo(1000, 0, function() {
-		var trigger = rollTrigger(game);
-		if(!trigger) return;
-		current_instruction = new Instruction(trigger, defaults, game);
+	current_instruction = new Instruction(defaults, game);
 
-		current_instruction.updateHeader();
-
-		$("#title h2").fadeTo(1000, 1);
-	});
-}
-
-var rollTrigger = function(game) {
-	var trigger_pool = [defaults["Triggers"], game["Triggers"]];
-	var exceptions = {"title": getCheckedBoxes("triggers", false), "modes": getCheckedBoxes("modes", false)};
-	return getRandomTorD(trigger_pool, exceptions);
+	current_instruction.updateHeader();
 }
 
 $(document).ready(function() {
 	// General
 	fillLists();
 	selectDefaults();
+
+	// Listeners
+	addTitleListeners();
+	addMinimizeListeners();
 
 	// Visuals
 	greyUnchecked();
@@ -326,4 +350,7 @@ $(document).ready(function() {
 
 	// Put focus
 	$("#reroll").focus();
+
+	// Set background
+	setBackground(this[$("#game select").children(":selected").attr("value")]);
 });

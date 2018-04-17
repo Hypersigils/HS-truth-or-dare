@@ -55,7 +55,7 @@ var diablo_3 = {
 		],
 		"while": [
 			{
-				"title": "is in avatar modes (e.g. Archon)"
+				"title": "is in avatar mode (e.g. Archon)"
 			},
 			{
 				"title": "is in a rift",
@@ -74,7 +74,7 @@ var diablo_3 = {
 				"title": "is under the effect of a pylon"
 			},
 			{
-				"title": "is on an [even/odd] level"
+				"title": "is an [even/odd] level"
 			}
 		]
 	},
@@ -82,9 +82,6 @@ var diablo_3 = {
 		"truths": [
 		],
 		"dares": [
-			{
-				"title": "play an objective without a piece of essential gear"
-			}
 		]
 	}
 }
