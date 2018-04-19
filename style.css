@@ -53,6 +53,18 @@
 	overflow-y: scroll;
 }
 
+.rating {
+	display: flex;
+}
+
+.rating input {
+	flex-grow: 1;
+}
+
+#details em {
+	font-size: small;
+}
+
 h3 {
 	margin-top: 0px;
 	margin-right: 10px;

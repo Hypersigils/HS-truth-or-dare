@@ -7,7 +7,7 @@
 	<script src="JSON/diablo_3.js"></script>
 	<link rel="stylesheet" type="text/css" href="style.css"></style>
 </head>
-<body style="background-color: black; display: flex; align-items: center; justify-content: center;">
+<body style="background-color: black; display: flex; align-items: center; justify-content: center; background-size: contain">
 	<div id="content" class="white">
 		<div class="row" id="top">
 			<div class="column" style="flex-grow: 1;">
@@ -52,11 +52,18 @@
 					<h3>Settings</h3>
 					<div class="white minimize">-</div>
 					<div class="hide">
-						Lewds allowed
-						<div id="lewd">
-							<input type="checkbox" value="allowed">
+						Lewdness<br>
+						<em>How deep are you willing to go?</em>
+						<div class="rating" id="lewdness">
+							<input type="checkbox" value=0>
+							<input type="checkbox" value=1>
+							<input type="checkbox" value=2>
+							<input type="checkbox" value=3>
+							<input type="checkbox" value=4>
+							<input type="checkbox" value=5>
 						</div>
-						Intimacy
+						Intimacy<br>
+						<em>How much are you willing to show?</em>
 						<div class="rating" id="intimacy">
 							<input type="checkbox" value=0>
 							<input type="checkbox" value=1>
@@ -64,6 +71,14 @@
 							<input type="checkbox" value=3>
 							<input type="checkbox" value=4>
 							<input type="checkbox" value=5>
+						</div>
+						Frequency<br>
+						<em>How often should a task come to pass?</em>
+						<div class="rating" id="frequency">
+							<input type="checkbox" value="Rare" checked=true>
+							<input type="checkbox" value="Low" checked=true>
+							<input type="checkbox" value="Medium" checked=true>
+							<input type="checkbox" value="High" checked=true>
 						</div>
 					</div>
 				</div>

@@ -2,25 +2,30 @@ var defaults = {
 	"Triggers": {
 		"when": [
 			{
-				"title": "says [\"yes\"/\"no\"/\"what\"]"
+				"title": "says [\"yes\"/\"no\"/\"what\"]",
+				"frequency": "Medium"
 			},
 			{
-				"title": "completes an objective"
+				"title": "completes an objective",
+				"frequency": "Medium"
 			},
 			{
 				"title": "touch your partner's character model",
-				"requirements": ["partner"],
-				"who": ["you"]
+				"requirements": ["Partner"],
+				"who": ["you"],
+				"frequency": "Medium"
 			}
 		],
 		"while": [
 			{
-				"title": "is talking"
+				"title": "is talking",
+				"frequency": "Medium"
 			},
 			{
 				"title": "is looking at you",
-				"requirements": ["partner"],
-				"who": ["your partner", "anyone"]
+				"requirements": ["Partner"],
+				"who": ["your partner", "anyone"],
+				"frequency": "Medium"
 			}
 		]
 	},
@@ -28,207 +33,255 @@ var defaults = {
 		"truths": [
 			{
 				"title": "talk about a kink you want to explore",
-				"lewd": true,
+				"lewdness": 1,
 				"intimacy": 1
 			},
 			{
 				"title": "say your [favorite/least favorite] thing about [your partner/yourself]",
+				"lewdness": 1,
 				"intimacy": 2
 			},
 			{
 				"title": "name a naughty secret",
-				"lewd": true,
+				"lewdness": 1,
 				"intimacy": 1
 			},
 			{
 				"title": "name something that makes you [happy/sad/angry/annoyed]",
+				"lewdness": 0,
 				"intimacy": 0
 			},
 			{
 				"title": "name something you're thankful for about your partner",
+				"lewdness": 0,
 				"intimacy": 2
 			},
 			{
 				"title": "name something [embarrassing/cute/exciting] about yourself",
-				"lewd": true,
+				"lewdness": 0,
 				"intimacy": 2
 			},
 			{
 				"title": "describe a hobby you [have/want to have]",
+				"lewdness": 0,
 				"intimacy": 0
 			},
 			{
 				"title": "describe a taboo fantasy",
-				"lewd": true,
+				"lewdness": 2,
 				"intimacy": 2
 			},
 			{
 				"title": "describe your worst relationship",
+				"lewdness": 0,
 				"intimacy": 1
 			},
 			{
 				"title": "confess a dirty secret",
-				"lewd": true,
+				"lewdness": 2,
 				"intimacy": 2
 			},
 			{
 				"title": "describe a time you broke the law",
+				"lewdness": 0,
 				"intimacy": 1
 			},
 			{
 				"title": "describe a time you almost got caught doing something dirty",
-				"lewd": true,
+				"lewdness": 1,
 				"intimacy": 2
 			},
 			{
 				"title": "describe a fantasy of yours",
-				"lewd": true,
+				"lewdness": 1,
 				"intimacy": 2
 			}
 		],
 		"dares": [
 			{
 				"title": "tease your $erogenous_zone$ [lightly/strongly/harshly] [on bare skin/through your clothes]",
-				"lewd": true,
+				"lewdness": 3,
 				"intimacy": 1
 			},
 			{
 				"title": "slap your $bodypart$",
-				"lewd": true,
-				"intimacy": 2
+				"lewdness": 3,
+				"intimacy": 2,
+				"requirements": ["Noise"]
 			},
 			{
 				"title": "spank yourself",
-				"lewd": true,
-				"intimacy": 2
+				"lewdness": 3,
+				"intimacy": 2,
+				"requirements": ["Noise"]
 			},
 			{
 				"title": "do a sexy dance",
-				"lewd": true,
-				"intimacy": 1
+				"lewdness": 2,
+				"intimacy": 1,
+				"requirements": ["Visibility"]
 			},
 			{
 				"title": "tease your $erogenous_zone$",
-				"lewd": true,
+				"lewdness": 3,
 				"intimacy": 1
 			},
 			{
 				"title": "give your partner your best flirt",
+				"lewdness": 0,
 				"intimacy": 1,
-				"requirements": ["partner"]
+				"requirements": ["Partner"]
 			},
 			{
 				"title": "flash your partner your $bodypart$",
-				"lewd": true,
+				"lewdness": 4,
 				"intimacy": 3,
-				"requirements": ["partner"]
+				"requirements": ["Partner", "Visibility"]
 			},
 			{
 				"title": "blow your partner a kiss",
+				"lewdness": 0,
 				"intimacy": 1,
-				"requirements": ["partner"]
+				"requirements": ["Partner"]
 			},
 			{
 				"title": "repeat what your partner says",
+				"lewdness": 0,
 				"intimacy": 0,
-				"requirements": ["partner"]
+				"requirements": ["Partner"]
 			},
 			{
 				"title": "[thank/apologize to/praise] your partner",
+				"lewdness": 0,
 				"intimacy": 1,
-				"requirements": ["partner"]
+				"requirements": ["Partner"]
 			},
 			{
 				"title": "[moan/moan your partner's name]",
-				"lewd": true,
+				"lewdness": 2,
 				"intimacy": 2,
-				"requirements": ["noise"]
+				"requirements": ["Noise"]
 			},
 			{
 				"title": "rub against a pillow",
-				"lewd": true,
+				"lewdness": 3,
 				"intimacy": 2
 			},
 			{
 				"title": "talk dirty",
-				"lewd": true,
+				"lewdness": 4,
 				"intimacy": 2
 			},
 			{
 				"title": "beg your partner about something of their choosing",
-				"lewd": true,
+				"lewdness": 1,
 				"intimacy": 2,
-				"requirements": ["partner"]
+				"requirements": ["Partner"]
 			},
 			{
 				"title": "invert your power roles",
+				"lewdness": 0,
 				"intimacy": 4
 			},
 			{
 				"title": "follow one command involving your $toy$",
-				"lewd": true,
+				"lewdness": 4,
 				"intimacy": 3
 			},
 			{
 				"title": "pinch your $erogenous_zone$",
-				"lewd": true,
+				"lewdness": 3,
 				"intimacy": 2
 			},
 			{
 				"title": "take off your $clothing$",
-				"lewd": true,
+				"lewdness": 2,
 				"intimacy": 1
 			},
 			{
 				"title": "tug your underwear up",
-				"lewd": true,
+				"lewdness": 2,
 				"intimacy": 2,
-				"requirements": ["Vagina"]
+				"parts": ["Vagina"]
 			},
 			{
 				"title": "share one of your favorite naughty videos",
-				"lewd": true,
+				"lewdness": 2,
 				"intimacy": 1
 			},
 			{
 				"title": "bounce up and down",
+				"lewdness": 1,
 				"intimacy": 0,
-				"requirements": ["Breasts"]
-			},
-			{
-				"title": "repeat after your partner",
-				"intimacy": 1,
-				"when": ["during the"]
+				"parts": ["Breasts"]
 			},
 			{
 				"title": "play with yourself loudly",
-				"lewd": true,
-				"intimacy": 3
+				"lewdness": 4,
+				"intimacy": 3,
+				"requirements": ["Noise"]
 			},
 			{
 				"title": "send a picture of the mess you're making",
-				"lewd": true,
+				"lewdness": 4,
 				"intimacy": 4,
-				"when": ["every"]
+				"when": ["every"],
+				"requirements": ["Visibility"]
 			},
 			{
 				"title": "send a picture with your $erogenous_zone$ barely hidden",
-				"lewd": true,
-				"intimacy": 3
+				"lewdness": 3,
+				"intimacy": 3,
+				"requirements": ["Visibility"]
 			},
 			{
 				"title": "play with your $toy$ like you would your partner",
-				"lewd": true,
+				"lewdness": 3,
 				"intimacy": 2
 			},
 			{
 				"title": "take orders on how to touch your $erogenous_zone$",
-				"lewd": true,
+				"lewdness": 4,
 				"intimacy": 3
 			},
 			{
 				"title": "play an objective without a piece of essential gear",
-				"intimacy": 0
+				"lewdness": 0,
+				"intimacy": 0,
+				"requirements": ["Game"]
+			},
+			{
+				"title": "describe your favorite character in the game and why",
+				"lewdness": 0,
+				"intimacy": 0,
+				"requirements": ["Game"]
+			},
+			{
+				"title": "describe the hottest character in the game and why",
+				"lewdness": 1,
+				"intimacy": 1,
+				"requirements": ["Game"]
+			},
+			{
+				"title": "find dirty art of the character you're playing and give it to your partner",
+				"lewdness": 1,
+				"intimacy": 1,
+				"requirements": ["Game", "Partner"],
+				"frequency": ["Low"]
+			},
+			{
+				"title": "find dirty art of the character you're playing and make it your avatar",
+				"lewdness": 2,
+				"intimacy": 3,
+				"requirements": ["Game"],
+				"frequency": ["Low"]
+			},
+			{
+				"title": "change your status to a sentence of your partner's choice",
+				"lewdness": 0,
+				"intimacy": 0,
+				"requirements": ["Game"],
+				"frequency": ["Rare"]
 			}
 		]
 	}

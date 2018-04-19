@@ -179,6 +179,7 @@ var makeUL = function(items, secondary_checkbox) {
 var selectDefaults = function() {
 	$("#parts span.enabled input").prop("checked", false);
 	$("#toys span.enabled input").prop("checked", false);
+	$("#restrictions span.enabled input").prop("checked", false);
 
 	var EVERYONE_HAS_THESE = ["Mouth","Cheeks","Nipples","Ass cheeks","Ass","Phone"];
 
@@ -206,8 +207,9 @@ var fillLists = function() {
 	var available_list = {"divs":[$("#parts .hide"), $("#toys .hide")], "pools":[availables["Available parts"], availables["Available toys"]]};
 	var modes_list = {"divs":[$("#modes .hide")], "pools":[getTypesOfAttribute(game["Triggers"], "modes")]};
 	var roles_list = {"divs":[$("#roles .hide")], "pools":[getTypesOfAttribute(game["Triggers"], "roles")]};
+	var requirements_list = {"divs":[$("#restrictions .hide")], "pools": [{"No:":["Partner", "Noise", "Visibility"]}]}
 
-	var lists = [trigger_list, task_list, available_list, modes_list, roles_list];
+	var lists = [trigger_list, task_list, available_list, modes_list, roles_list, requirements_list];
 
 	// For each list we've got...
 	lists.forEach(function(list) {
@@ -291,7 +293,7 @@ var getTypesOfAttribute = function(pool, attribute) {
 }
 
 var getRandomTorD = function(pools, exceptions) {
-	// console.log(exceptions);
+	console.log(exceptions);
 	var all_tords = [];
 	for(var pool of pools) {
 		for(var category in pool) {
@@ -327,6 +329,8 @@ var getRandomTorD = function(pools, exceptions) {
 		possible_tords.push(tord);
 	});
 
+	console.log(possible_tords);
+
 	return possible_tords.random();
 }
 
@@ -337,12 +341,19 @@ var getExceptions = function(tord) {
 	if(tord === "trigger") {
 		exceptions.title = getCheckedBoxes($("#triggers li :checkbox"), false);
 		exceptions.modes = getCheckedBoxes($("#modes li :checkbox"), false);
+		exceptions.requirements = getCheckedBoxes($("#requirements :checkbox"), true);
+		exceptions.frequency = $.map($("#frequency :checkbox:not(:checked)"), function(box) {
+			return $(box).val();
+		});
 	} else if(tord === "task") {
-		if(!$("#lewd :checkbox").is(":checked")) exceptions.lewd = [true];
 		exceptions.title = getCheckedBoxes($("#tasks li :checkbox"), false);
 		exceptions.parts = getCheckedBoxes($("#parts li :checkbox"), false);
 		exceptions.toys = getCheckedBoxes($("#toys li :checkbox"), false);
+		exceptions.requirements = getCheckedBoxes($("#requirements :checkbox"), true);
 		exceptions.intimacy = $.map($("#intimacy :checkbox:not(:checked)"), function(box) {
+			return parseInt($(box).val());
+		});
+		exceptions.lewdness = $.map($("#lewdness :checkbox:not(:checked)"), function(box) {
 			return parseInt($(box).val());
 		});
 	}
