@@ -3,29 +3,24 @@ var defaults = {
 		"when": [
 			{
 				"title": "says [\"yes\"/\"no\"/\"what\"]",
-				"frequency": "Medium"
-			},
-			{
-				"title": "completes an objective",
-				"frequency": "Medium"
+				"requirements": ["Voice"]
 			},
 			{
 				"title": "touch your partner's character model",
 				"requirements": ["Partner"],
 				"who": ["you"],
-				"frequency": "Medium"
 			}
 		],
 		"while": [
 			{
 				"title": "is talking",
-				"frequency": "Medium"
+				"frequency": "High"
 			},
 			{
 				"title": "is looking at you",
 				"requirements": ["Partner"],
 				"who": ["your partner", "anyone"],
-				"frequency": "Medium"
+				"frequency": "High"
 			}
 		]
 	},
@@ -34,7 +29,7 @@ var defaults = {
 			{
 				"title": "talk about a kink you want to explore",
 				"lewdness": 1,
-				"intimacy": 1
+				"intimacy": 2
 			},
 			{
 				"title": "say your [favorite/least favorite] thing about [your partner/yourself]",
@@ -48,23 +43,18 @@ var defaults = {
 			},
 			{
 				"title": "name something that makes you [happy/sad/angry/annoyed]",
-				"lewdness": 0,
-				"intimacy": 0
 			},
 			{
 				"title": "name something you're thankful for about your partner",
-				"lewdness": 0,
-				"intimacy": 2
+				"intimacy": 3
 			},
 			{
 				"title": "name something [embarrassing/cute/exciting] about yourself",
-				"lewdness": 0,
 				"intimacy": 2
 			},
 			{
 				"title": "describe a hobby you [have/want to have]",
-				"lewdness": 0,
-				"intimacy": 0
+				"intimacy": 1
 			},
 			{
 				"title": "describe a taboo fantasy",
@@ -73,7 +63,6 @@ var defaults = {
 			},
 			{
 				"title": "describe your worst relationship",
-				"lewdness": 0,
 				"intimacy": 1
 			},
 			{
@@ -83,12 +72,11 @@ var defaults = {
 			},
 			{
 				"title": "describe a time you broke the law",
-				"lewdness": 0,
 				"intimacy": 1
 			},
 			{
 				"title": "describe a time you almost got caught doing something dirty",
-				"lewdness": 1,
+				"lewdness": 2,
 				"intimacy": 2
 			},
 			{
@@ -100,35 +88,30 @@ var defaults = {
 		"dares": [
 			{
 				"title": "tease your $erogenous_zone$ [lightly/strongly/harshly] [on bare skin/through your clothes]",
-				"lewdness": 3,
-				"intimacy": 1
+				"lewdness": 3
 			},
 			{
 				"title": "slap your $bodypart$",
 				"lewdness": 3,
-				"intimacy": 2,
 				"requirements": ["Noise"]
 			},
 			{
 				"title": "spank yourself",
 				"lewdness": 3,
-				"intimacy": 2,
 				"requirements": ["Noise"]
 			},
 			{
 				"title": "do a sexy dance",
 				"lewdness": 2,
-				"intimacy": 1,
+				"intimacy": 3,
 				"requirements": ["Visibility"]
 			},
 			{
 				"title": "tease your $erogenous_zone$",
-				"lewdness": 3,
-				"intimacy": 1
+				"lewdness": 3
 			},
 			{
 				"title": "give your partner your best flirt",
-				"lewdness": 0,
 				"intimacy": 1,
 				"requirements": ["Partner"]
 			},
@@ -136,23 +119,21 @@ var defaults = {
 				"title": "flash your partner your $bodypart$",
 				"lewdness": 4,
 				"intimacy": 3,
+				"exposure": 4,
 				"requirements": ["Partner", "Visibility"]
 			},
 			{
 				"title": "blow your partner a kiss",
-				"lewdness": 0,
 				"intimacy": 1,
 				"requirements": ["Partner"]
 			},
 			{
 				"title": "repeat what your partner says",
-				"lewdness": 0,
-				"intimacy": 0,
-				"requirements": ["Partner"]
+				"exposure": 1,
+				"requirements": ["Partner", "Voice"]
 			},
 			{
 				"title": "[thank/apologize to/praise] your partner",
-				"lewdness": 0,
 				"intimacy": 1,
 				"requirements": ["Partner"]
 			},
@@ -160,7 +141,8 @@ var defaults = {
 				"title": "[moan/moan your partner's name]",
 				"lewdness": 2,
 				"intimacy": 2,
-				"requirements": ["Noise"]
+				"exposure": 1,
+				"requirements": ["Noise", "Voice"]
 			},
 			{
 				"title": "rub against a pillow",
@@ -170,7 +152,9 @@ var defaults = {
 			{
 				"title": "talk dirty",
 				"lewdness": 4,
-				"intimacy": 2
+				"intimacy": 2,
+				"exposure": 1,
+				"requirements": ["Voice"]
 			},
 			{
 				"title": "beg your partner about something of their choosing",
@@ -180,7 +164,6 @@ var defaults = {
 			},
 			{
 				"title": "invert your power roles",
-				"lewdness": 0,
 				"intimacy": 4
 			},
 			{
@@ -202,7 +185,8 @@ var defaults = {
 				"title": "tug your underwear up",
 				"lewdness": 2,
 				"intimacy": 2,
-				"parts": ["Vagina"]
+				"parts": ["Vagina"],
+				"clothing": ["Underwear"]
 			},
 			{
 				"title": "share one of your favorite naughty videos",
@@ -212,19 +196,20 @@ var defaults = {
 			{
 				"title": "bounce up and down",
 				"lewdness": 1,
-				"intimacy": 0,
 				"parts": ["Breasts"]
 			},
 			{
 				"title": "play with yourself loudly",
 				"lewdness": 4,
 				"intimacy": 3,
+				"exposure": 1,
 				"requirements": ["Noise"]
 			},
 			{
 				"title": "send a picture of the mess you're making",
 				"lewdness": 4,
 				"intimacy": 4,
+				"exposure": 3,
 				"when": ["every"],
 				"requirements": ["Visibility"]
 			},
@@ -232,6 +217,7 @@ var defaults = {
 				"title": "send a picture with your $erogenous_zone$ barely hidden",
 				"lewdness": 3,
 				"intimacy": 3,
+				"exposure": 3,
 				"requirements": ["Visibility"]
 			},
 			{
@@ -245,15 +231,7 @@ var defaults = {
 				"intimacy": 3
 			},
 			{
-				"title": "play an objective without a piece of essential gear",
-				"lewdness": 0,
-				"intimacy": 0,
-				"requirements": ["Game"]
-			},
-			{
 				"title": "describe your favorite character in the game and why",
-				"lewdness": 0,
-				"intimacy": 0,
 				"requirements": ["Game"]
 			},
 			{
@@ -266,8 +244,7 @@ var defaults = {
 				"title": "find dirty art of the character you're playing and give it to your partner",
 				"lewdness": 1,
 				"intimacy": 1,
-				"requirements": ["Game", "Partner"],
-				"frequency": ["Low"]
+				"requirements": ["Game", "Partner"]
 			},
 			{
 				"title": "find dirty art of the character you're playing and make it your avatar",
@@ -278,8 +255,6 @@ var defaults = {
 			},
 			{
 				"title": "change your status to a sentence of your partner's choice",
-				"lewdness": 0,
-				"intimacy": 0,
 				"requirements": ["Game"],
 				"frequency": ["Rare"]
 			}

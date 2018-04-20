@@ -1,11 +1,10 @@
-//VARIABLES
+// VARIABLES
 var EROGENOUS_ZONES = ["Mouth","Nipples","Ass","Breasts","Clitoris","Vulva","Vagina","Dick"];
 var TITLE_SPANS = ["when","who","does","what"];
 var current_instruction = null;
 var active_instructions = [];
-var active_game = null;
 
-//OBJECTS
+// OBJECTS
 class Instruction {
 	constructor(default_pool, game_pool) {
 		this.default_pool = default_pool;
@@ -60,7 +59,7 @@ class Instruction {
 	updateHeader(span_id) {
 		if(span_id) {
 			var string = this[span_id];
-			if(span_id == "when") string = string.charAt(0).toUpperCase() + string.slice(1);
+			if(span_id == "when") string = string.capitalizeFirst();
 			$("#" + span_id).fadeOut(1000, function() {
 					$(this).text(string).fadeIn(1000);
 				});
@@ -72,8 +71,7 @@ class Instruction {
 	}
 }
 
-//PROTOYPES
-
+// PROTOYPES
 Array.prototype.random = function() {
 
 	return this[Math.floor(Math.random() * this.length)];
@@ -103,7 +101,7 @@ String.prototype.splitOptions = function() {
 String.prototype.replaceArchetype = function() {
 	var string = this.toString();
 
-	var archetypes = {"bodypart": getCheckedBoxes($("#parts li :checkbox"), true), "erogenous_zone": EROGENOUS_ZONES, "toy": getCheckedBoxes($("#toys li :checkbox"), true)};
+	var archetypes = {"bodypart": getCheckedBoxes($("#parts li :checkbox"), true), "erogenous_zone": EROGENOUS_ZONES, "toy": getCheckedBoxes($("#toys li :checkbox"), true), "clothing": getCheckedBoxes($("#clothing li :checkbox"), true)};
 	while(string.includes("$")) {
 		var match = string.match(/\$(.*?)\$/);
 		if(archetypes[match[1]]) {
@@ -119,7 +117,7 @@ String.prototype.replaceArchetype = function() {
 String.prototype.pronounize = function() {
 	var string = this.toString();
 
-	var exceptions = {"is":"are"};
+	var exceptions = {"is":"are", "their":"your", "has":"have"};
 	var words = string.split(" ");
 	var first_word = words[0];
 
@@ -136,8 +134,15 @@ String.prototype.pronounize = function() {
 	return string;
 }
 
-//SETUP SCRIPTS
+String.prototype.capitalizeFirst = function() {
+	var string = this.toString();
 
+	string = string.charAt(0).toUpperCase() + string.slice(1);
+
+	return string;
+}
+
+// SETUP SCRIPTS
 var makeUL = function(items, secondary_checkbox) {	
 	var ul = document.createElement("ul");
 	items.forEach(function(item) {
@@ -176,40 +181,77 @@ var makeUL = function(items, secondary_checkbox) {
 	return ul;
 }
 
+var makeScale = function(parent, category) {
+	var div = document.createElement("div");
+	div.id = category;
+	div.style.marginBottom = "10px";
+
+	div.append(category.capitalizeFirst());
+	div.append(document.createElement("br"));
+
+	var em = document.createElement("em");
+	em.textContent = parent[category].description;
+	div.append(em)
+
+	var subdiv = document.createElement("div");
+	subdiv.className = "rating";
+	for(var level in parent[category].levels) {
+		var input = document.createElement("input");
+		input.type = "checkbox";
+		input.value = level;
+		subdiv.append(input);
+	}
+
+	div.append(subdiv);
+	return div;
+}
+
 var selectDefaults = function() {
 	$("#parts span.enabled input").prop("checked", false);
 	$("#toys span.enabled input").prop("checked", false);
 	$("#restrictions span.enabled input").prop("checked", false);
+	$("#clothing span.enabled input").prop("checked", false);
 
 	var EVERYONE_HAS_THESE = ["Mouth","Cheeks","Nipples","Ass cheeks","Ass","Phone"];
+	var JUST_ENOUGH_SETTINGS = {"lewdness": [0, 1, 2], "intimacy": [0, 1], "exposure": [0, 1], "frequency": ["Low", "Medium", "High"]}
+
+	for(var setting in JUST_ENOUGH_SETTINGS) {
+		JUST_ENOUGH_SETTINGS[setting].forEach(function(rating) {
+			$("#" + setting + " input[value='" + rating + "']").prop("checked", true);
+		});
+	}
 
 	EVERYONE_HAS_THESE.forEach(function(part) {
 		$("#parts li:contains('" + part + "') span.enabled input").prop("checked", true);
 		$("#toys li:contains('" + part + "') span.enabled input").prop("checked", true);
 	});
 
-	var JUST_ENOUGH_LEWD = [0, 1, 2];
-	JUST_ENOUGH_LEWD.forEach(function(rating) {
-		$("#lewdness input[value='" + rating + "']").prop("checked", true);
-	});
-
-	var JUST_ENOUGH_INTIMACY = [0, 1];
-	JUST_ENOUGH_INTIMACY.forEach(function(rating) {
-		$("#intimacy input[value='" + rating + "']").prop("checked", true);
+	var EVERYONE_WEARS_THESE = ["Shirt", "Pants", "Underwear", "Socks"]
+	EVERYONE_WEARS_THESE.forEach(function(clothes) {
+		$("#clothing li:contains('" + clothes + "') span.enabled input").prop("checked", true);
 	});
 }
 
-var fillLists = function() {
-	var game = this[$("#game select").children(":selected").attr("value")];
+var fillGames = function(games) {
+	games.forEach(function(game) {
+		var option = document.createElement("option");
+		option.value = game.replace(" ", "_").toLowerCase();
+		option.textContent = game;
+		$("#game select").append(option);
+	});
+}
 
-	var trigger_list = {"divs":[$("[id='game-specific triggers']"), $("[id='universal triggers']")], "pools":[game["Triggers"], defaults["Triggers"]]};
-	var task_list = {"divs":[$("[id='game-specific tasks']"), $("[id='universal tasks']")], "pools":[game["Tasks"], defaults["Tasks"]]};
-	var available_list = {"divs":[$("#parts .hide"), $("#toys .hide")], "pools":[availables["Available parts"], availables["Available toys"]]};
-	var modes_list = {"divs":[$("#modes .hide")], "pools":[getTypesOfAttribute(game["Triggers"], "modes")]};
-	var roles_list = {"divs":[$("#roles .hide")], "pools":[getTypesOfAttribute(game["Triggers"], "roles")]};
-	var requirements_list = {"divs":[$("#restrictions .hide")], "pools": [{"No:":["Partner", "Noise", "Visibility"]}]}
+var fillLists = function(game) {
+	var trigger_list = {"divs":[$("[id='game-specific triggers']"), $("[id='universal triggers']")], "pools": [game["Triggers"], defaults["Triggers"]]};
+	var task_list = {"divs":[$("[id='game-specific tasks']"), $("[id='universal tasks']")], "pools": [game["Tasks"], defaults["Tasks"]]};
+	var available_list = {"divs":[$("#parts .hide"), $("#toys .hide")], "pools": [availables["Available parts"], availables["Available toys"]]};
+	var modes_list = {"divs":[$("#modes .hide")], "pools": [getTypesOfAttribute(game["Triggers"], "modes")]};
+	var roles_list = {"divs":[$("#roles .hide")], "pools": [getTypesOfAttribute(game["Triggers"], "roles")]};
+	var requirements_list = {"divs":[$("#restrictions .hide")], "pools": [{"No:": ["Partner", "Noise", "Visibility", "Voice"]}]};
+	var clothing_list = {"divs":[$("#clothing .hide")], "pools": [availables["Clothing"]]};
+	var background_list = {"divs": [$("#backgrounds .hide")], "pools": [game["Backgrounds"]]};
 
-	var lists = [trigger_list, task_list, available_list, modes_list, roles_list, requirements_list];
+	var lists = [trigger_list, task_list, available_list, modes_list, roles_list, requirements_list, clothing_list, background_list];
 
 	// For each list we've got...
 	lists.forEach(function(list) {
@@ -228,6 +270,14 @@ var fillLists = function() {
 			}
 		}
 	});
+}
+
+var fillSettings = function() {
+	var div = $("#settings .hide");
+
+	for(var setting in settings) {
+		div.append(makeScale(settings, setting))
+	}
 }
 
 var greyUnchecked = function() {
@@ -265,19 +315,26 @@ var addMinimizeListeners = function() {
 	});
 }
 
+var addRerollListener = function() {
+	context = this;
+	$("#reroll").click(function() {
+		randomize(context[$("#game select").val()]);
+	});
+}
+
 var setBackground = function(game) {
-	var backgrounds = {"barbarian":1, "crusader":2, "demon_hunter":5, "diablo":1, "leah":1, "monk":4, "necromancer":3, "witch_doctor":1, "wizard":3}
+	var backgrounds = game["Backgrounds"];
 	var images = []
-	for(var character in backgrounds) {
-		for(var i=0; i<backgrounds[character]; i++) {
-			images.push(character + (i + 1) + ".jpg");
+	for(var character of backgrounds) {
+		for(var i=1; i<character.number + 1; i++) {
+			images.push(character.title + i + ".jpg");
 		}
 	}
 
-	$("body").animate("slow").css("background-image", "url(backgrounds/" + game + "/" + images.random() + ")");
+	$("body").animate("slow").css("background-image", "url(backgrounds/" + game.Title.replace(" ", "_").toLowerCase() + "/" + images.random() + ")");
 }
 
-//JSON OBJECT INTERPRETATION
+// JSON OBJECT INTERPRETATION
 var getTypesOfAttribute = function(pool, attribute) {
 	var types = new Set();
 
@@ -293,7 +350,6 @@ var getTypesOfAttribute = function(pool, attribute) {
 }
 
 var getRandomTorD = function(pools, exceptions) {
-	console.log(exceptions);
 	var all_tords = [];
 	for(var pool of pools) {
 		for(var category in pool) {
@@ -310,8 +366,9 @@ var getRandomTorD = function(pools, exceptions) {
 		// compare it with every type of exception...
 		for(var key in exceptions) {
 			// console.log(key);
-			// if the object has a need for something from that type...
+			// if the object doesn't have that exception listed, try to add the default.
 			var needs = tord[key];
+			if(needs == null && key in settings) needs = [settings[key].default]
 			if(needs != null) {
 				// if this is not a list, make it one. Thanks .js.
 				if(typeof needs != "object") var needs = [needs];
@@ -329,12 +386,10 @@ var getRandomTorD = function(pools, exceptions) {
 		possible_tords.push(tord);
 	});
 
-	console.log(possible_tords);
-
 	return possible_tords.random();
 }
 
-//HTML INTERPRETATION
+// HTML INTERPRETATION
 var getExceptions = function(tord) {
 	var exceptions = {};
 
@@ -374,32 +429,42 @@ var getCheckedBoxes = function(inputs, is_checked) {
 }
 
 // THAT GOOD RANDOM
-var randomize = function() {
-	var game = this[$("#game select").children(":selected").attr("value")];
-
+var randomize = function(game) {
 	current_instruction = new Instruction(defaults, game);
 
 	current_instruction.updateHeader();
 }
 
-$(document).ready(function() {
+// SETUP FUNCTIONS
+var setup = function(game_title) {
 	// General
-	fillLists();
-	selectDefaults();
+	active_game = this[game_title];
+	fillLists(active_game);
+
+	// Random task
+	randomize(active_game);
+
+	// Set background
+	setBackground(active_game);
+
+	// Put focus
+	$("#reroll").focus();
+}
+
+$(document).ready(function() {
+	fillGames(["any", "Diablo 3", "Overwatch"]);
+	addRerollListener();
 
 	// Listeners
 	addTitleListeners();
 	addMinimizeListeners();
 
+	// Defaults
+	fillSettings();
+	selectDefaults();
+
 	// Visuals
 	greyUnchecked();
 
-	// Random task
-	randomize();
-
-	// Put focus
-	$("#reroll").focus();
-
-	// Set background
-	setBackground($("#game select").children(":selected").attr("value"));
+	setup($("#game select").val());
 });

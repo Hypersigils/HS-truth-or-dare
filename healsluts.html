@@ -2,12 +2,15 @@
 <head>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="JSON/defaults.js"></script>
-	<script src="JSON/preferences.js"></script>
+	<script src="JSON/availables.js"></script>
+	<script src="JSON/settings.js"></script>
 
-	<script src="JSON/diablo_3.js"></script>
+	<script src="JSON/Games/any.js"></script>
+	<script src="JSON/Games/diablo_3.js"></script>
+	<script src="JSON/Games/overwatch.js"></script>
 	<link rel="stylesheet" type="text/css" href="style.css"></style>
 </head>
-<body style="background-color: black; display: flex; align-items: center; justify-content: center; background-size: contain">
+<body>
 	<div id="content" class="white">
 		<div class="row" id="top">
 			<div class="column" style="flex-grow: 1;">
@@ -22,15 +25,14 @@
 			</div>
 			<div class="column">
 				<div class="white" style="display: flex; align-items: center; flex-grow: 1">
-					<button onclick="randomize()" style="height: 50px; font-size: 12pt; font-weight: bold;" id="reroll">Reroll</button>
+					<button style="height: 50px; font-size: 12pt; font-weight: bold;" id="reroll">Reroll</button>
 				</div>
 			</div>
 		</div>
 		<div class="row" id="bottom">
 			<div class="column">
 				<div id="game" class="white"><h3>Game:</h3> 
-					<select style="width: -webkit-fill-available;">
-						<option value=diablo_3>Diablo 3</option>
+					<select style="width: -webkit-fill-available;" onchange="setup(this.value)">
 					</select>
 				</div>
 				<div class="white" id="modes">
@@ -40,59 +42,43 @@
 				</div>
 				<div class="white" id="roles">
 					<h3>Roles</h3>
-					<div class="white minimize">-</div>
-					<div class="hide"></div>
+					<div class="white minimize">+</div>
+					<div class="hide" style="display: none;"></div>
 				</div>
+				<div class="white" id="backgrounds">
+					<h3>Backgrounds</h3>
+					<div class="white minimize">+</div>
+					<div class="hide" style="display: none"></div>
+				</div>
+			</div>
+			<div class="column">
 				<div class="white" id="restrictions">
 					<h3>Restrictions</h3>
-					<div class="white minimize">-</div>
-					<div class="hide"></div>
+					<div class="white minimize">+</div>
+					<div class="hide" style="display: none;"></div>
 				</div>
-				<div class="white" id="details">
+				<div class="white" id="settings">
 					<h3>Settings</h3>
 					<div class="white minimize">-</div>
 					<div class="hide">
-						Lewdness<br>
-						<em>How deep are you willing to go?</em>
-						<div class="rating" id="lewdness">
-							<input type="checkbox" value=0>
-							<input type="checkbox" value=1>
-							<input type="checkbox" value=2>
-							<input type="checkbox" value=3>
-							<input type="checkbox" value=4>
-							<input type="checkbox" value=5>
-						</div>
-						Intimacy<br>
-						<em>How much are you willing to show?</em>
-						<div class="rating" id="intimacy">
-							<input type="checkbox" value=0>
-							<input type="checkbox" value=1>
-							<input type="checkbox" value=2>
-							<input type="checkbox" value=3>
-							<input type="checkbox" value=4>
-							<input type="checkbox" value=5>
-						</div>
-						Frequency<br>
-						<em>How often should a task come to pass?</em>
-						<div class="rating" id="frequency">
-							<input type="checkbox" value="Rare" checked=true>
-							<input type="checkbox" value="Low" checked=true>
-							<input type="checkbox" value="Medium" checked=true>
-							<input type="checkbox" value="High" checked=true>
-						</div>
 					</div>
 				</div>
 			</div>
-			<div class="column" id="middle">
+			<div class="column">
 				<div class="white" id="parts">
 					<h3>Available parts</h3>
-					<div class="white minimize">-</div>
-					<div class="hide"></div>
+					<div class="white minimize">+</div>
+					<div class="hide" style="display: none;"></div>
 				</div>
 				<div class="white" id="toys">
 					<h3>Available toys</h3>
-					<div class="white minimize">-</div>
-					<div class="hide"></div>
+					<div class="white minimize">+</div>
+					<div class="hide" style="display: none;"></div>
+				</div>
+				<div class="white" id="clothing">
+					<h3>Clothing</h3>
+					<div class="white minimize">+</div>
+					<div class="hide" style="display: none;"></div>
 				</div>
 			</div>
 			<div class="column">
